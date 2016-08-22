@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	 <!-- 定义日志文件 输入位置 -->  
+    <property name="log_dir" value="/tmp/logs/spring-boot-redis-demo" />  
+    <!-- 日志最大的历史 30天 -->  
+    <property name="maxHistory" value="30"/>
+    <!-- 日志文件大小 5MB -->  
+    <property name="maxFileSize" value="5MB"/>
+    
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}/info.log</file>
+		<!-- 过滤器，只记录INFO级别的日志 -->  
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+            <level>INFO</level>  
+            <onMatch>ACCEPT</onMatch>  
+            <onMismatch>DENY</onMismatch>  
+        </filter>  
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>${maxHistory}</maxHistory> 
+			<fileNamePattern>${log_dir}/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动     --> 
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">     
+            <maxFileSize>${maxFileSize}</maxFileSize>     
+        </triggeringPolicy>  
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="rollingWarnFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log_dir}/warn.log</file>
+		<!-- 过滤器，只记录WARN级别的日志 -->  
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">  
+            <level>WARN</level>  
+            <onMatch>ACCEPT</onMatch>  
+            <onMismatch>DENY</onMismatch>  
+        </filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<maxHistory>${maxHistory}</maxHistory> 
+			<fileNamePattern>${log_dir}/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+		</rollingPolicy>
+		<!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动     --> 
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">     
+            <maxFileSize>${maxFileSize}</maxFileSize>     
+        </triggeringPolicy>  
+		<encoder>
+			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="org.jdonee.cooking" level="DEBUG" />
+	<logger name="org.apache.shiro.*.mgt" level="DEBUG"/>
+	<logger name="org.apache.shiro.spring" level="DEBUG"/>
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="rollingFile" />
+		<appender-ref ref="rollingWarnFile" />
+	</root>
+	
+</configuration>
