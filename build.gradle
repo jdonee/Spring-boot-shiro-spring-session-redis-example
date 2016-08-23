@@ -57,6 +57,7 @@ dependencies {
 	compile('org.apache.shiro:shiro-core:1.3.0')
 	compile('org.apache.shiro:shiro-web:1.3.0')
 	compile('org.apache.shiro:shiro-aspectj:1.3.0')
+	compile('org.apache.shiro:shiro-quartz:1.3.0')
 	compile('org.apache.shiro:shiro-spring:1.3.0')
 	
 	compile('mysql:mysql-connector-java')

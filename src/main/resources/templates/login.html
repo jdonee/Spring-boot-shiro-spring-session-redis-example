@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Login</title>
 
 <!-- Bootstrap -->
@@ -65,15 +65,15 @@ body {
 </head>
 <body>
 	<div class="container">
-		<form class="form-signin" th:action="${/login}" method="post">
+		<form class="form-signin" th:action="@{/login}" method="post">
 			<h2 class="form-signin-heading">Please sign in</h2>
-			<label for="inputEmail" class="sr-only">Account</label> <input type="text" id="inputEmail" class="form-control"
-				placeholder="Account" class="required autofocus" name="account"> <label for="inputPassword" class="sr-only">Password</label>
-			<input type="password" id="inputPassword" class="form-control" placeholder="Password" class="required"
-				name="password">
+			<label for="inputEmail" class="sr-only">Account</label> 
+			<input type="text" id="inputEmail" class="form-control required autofocus" placeholder="Account" name="account"/> 
+			<label for="inputPassword" class="sr-only">Password</label>
+			<input type="password" id="inputPassword" class="form-control required" placeholder="Password" name="password"/>
 			<div class="checkbox">
 				<label> 
-					<input type="checkbox" value="remember-me"> Remember me
+					<input type="checkbox" value="remember-me"/> Remember me
 				</label>
 			</div>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>

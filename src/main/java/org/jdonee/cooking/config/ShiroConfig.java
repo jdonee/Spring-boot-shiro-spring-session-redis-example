@@ -23,6 +23,11 @@ import com.google.common.collect.Maps;
 @Configuration
 public class ShiroConfig {
 
+	@Bean
+	public ShiroRedisProperties shiroProperties() {
+		return new ShiroRedisProperties();
+	}
+
 	/**
 	 * FilterRegistrationBean
 	 * 
@@ -122,20 +127,21 @@ public class ShiroConfig {
 	}
 
 	@Bean(name = "redisTemplate")
-	public RedisTemplate<byte[], Object> redisTemplate() {
-		RedisTemplate<byte[], Object> template = new RedisTemplate<>();
+	public RedisTemplate<byte[], byte[]> redisTemplate() {
+		RedisTemplate<byte[], byte[]> template = new RedisTemplate<>();
 		template.setConnectionFactory(connectionFactory());
 		return template;
 	}
 
 	@Bean
+	@DependsOn(value = "shiroProperties")
 	public JedisConnectionFactory connectionFactory() {
 		JedisConnectionFactory conn = new JedisConnectionFactory();
-		conn.setDatabase(3);
-		conn.setHostName("127.0.0.1");
-		conn.setPassword("1qazse4");
-		conn.setPort(6379);
-		conn.setTimeout(3000);
+		conn.setDatabase(shiroProperties().getDatabase());
+		conn.setHostName(shiroProperties().getHostName());
+		conn.setPassword(shiroProperties().getPassword());
+		conn.setPort(shiroProperties().getPort());
+		conn.setTimeout(shiroProperties().getTimeout());
 		return conn;
 	}
 
@@ -143,4 +149,5 @@ public class ShiroConfig {
 	public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
 		return new LifecycleBeanPostProcessor();
 	}
+
 }
