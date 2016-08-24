@@ -123,6 +123,7 @@ public class ShiroConfig {
 	@DependsOn(value = "redisTemplate")
 	public ShrioRedisCacheManager redisCacheManager() {
 		ShrioRedisCacheManager cacheManager = new ShrioRedisCacheManager(redisTemplate());
+		// cacheManager.createCache("shiro_redis:");
 		return cacheManager;
 	}
 
