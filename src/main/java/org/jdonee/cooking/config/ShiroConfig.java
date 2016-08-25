@@ -60,6 +60,7 @@ public class ShiroConfig {
 		bean.setFilters(filters);
 
 		Map<String, String> chains = Maps.newHashMap();
+		chains.put("/druid/**", "anon");
 		chains.put("/login", "anon");
 		chains.put("/unauthor", "anon");
 		chains.put("/logout", "logout");
