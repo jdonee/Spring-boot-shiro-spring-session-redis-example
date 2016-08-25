@@ -26,7 +26,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/index"> Welcome, <shiro:principal/></a>
+          <a class="navbar-brand" href="/index"> Welcome, <span shiro:principal=""></span></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -48,39 +48,17 @@
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="/index">Overview <span class="sr-only">(current)</span></a></li>
-            <shiro:hasPermission name="Reports">
-            	<li><a href="/reports">Reports</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Analytics">
-            	<li><a href="#">Analytics</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Export">
-            	<li><a href="#">Export</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Nav_item">
-            	<li><a href="">Nav item</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Nav_item_again">
-            	<li><a href="">Nav item again</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="One_more_nav">
-            	<li><a href="">One more nav</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Another_nav_item">
-            	<li><a href="">Another nav item</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="More_navigation">
-            	<li><a href="">More navigation</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Nav_item_again1">
-            	<li><a href="">Nav item again</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="One_more_nav1">
-            	<li><a href="">One more nav</a></li>
-            </shiro:hasPermission>
-            <shiro:hasPermission name="Another_nav_item1">
-           		<li><a href="">Another nav item</a></li>
-            </shiro:hasPermission>
+            <li shiro:hasPermission="Reports"><a href="/reports">Reports</a></li>
+            <li shiro:hasPermission="Analytics"><a href="#">Analytics</a></li>
+            <li shiro:hasPermission="Export"><a href="#">Export</a></li>
+            <li shiro:hasPermission="Nav_item"><a href="">Nav item</a></li>
+            <li shiro:hasPermission="Nav_item_again"><a href="">Nav item again</a></li>
+            <li shiro:hasPermission="One_more_nav"><a href="">One more nav</a></li>
+            <li shiro:hasPermission="Another_nav_item"><a href="">Another nav item</a></li>
+            <li shiro:hasPermission="More_navigation"><a href="">More navigation</a></li>
+            <li shiro:hasPermission="Nav_item_again1"><a href="">Nav item again</a></li>
+            <li shiro:hasPermission="One_more_nav1"><a href="">One more nav</a></li>
+           	<li shiro:hasPermission="Another_nav_item1"><a href="">Another nav item</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">

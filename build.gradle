@@ -63,9 +63,12 @@ dependencies {
 	compile('com.alibaba:druid:1.0.25')
 	
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.thymeleaf:thymeleaf:3.0.1.RELEASE')
+	compile('org.thymeleaf:thymeleaf-spring4:3.0.1.RELEASE')
+	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:2.0.1')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-tomcat')
-	compile('com.github.theborakompanioni:thymeleaf-extras-shiro:1.2.1')
+	compile('com.github.theborakompanioni:thymeleaf3-extras-shiro:1.2.1')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
