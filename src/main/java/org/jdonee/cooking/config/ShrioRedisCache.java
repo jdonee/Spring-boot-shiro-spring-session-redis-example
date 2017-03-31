@@ -19,15 +19,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ShrioRedisCache<K, V> implements Cache<K, V> {
-	private RedisTemplate<byte[], V> redisTemplate;
+	private RedisTemplate<byte[], V> shiroRedisTemplate;
 	private String prefix = "shiro_redis:";
 
-	public ShrioRedisCache(RedisTemplate<byte[], V> redisTemplate) {
-		this.redisTemplate = redisTemplate;
+	public ShrioRedisCache(RedisTemplate<byte[], V> shiroRedisTemplate) {
+		this.shiroRedisTemplate = shiroRedisTemplate;
 	}
 
-	public ShrioRedisCache(RedisTemplate<byte[], V> redisTemplate, String prefix) {
-		this(redisTemplate);
+	public ShrioRedisCache(RedisTemplate<byte[], V> shiroRedisTemplate, String prefix) {
+		this(shiroRedisTemplate);
 		this.prefix = prefix;
 	}
 
@@ -41,7 +41,7 @@ public class ShrioRedisCache<K, V> implements Cache<K, V> {
 		}
 
 		byte[] bkey = getByteKey(key);
-		return redisTemplate.opsForValue().get(bkey);
+		return shiroRedisTemplate.opsForValue().get(bkey);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ShrioRedisCache<K, V> implements Cache<K, V> {
 		}
 
 		byte[] bkey = getByteKey(key);
-		redisTemplate.opsForValue().set(bkey, value);
+		shiroRedisTemplate.opsForValue().set(bkey, value);
 		return value;
 	}
 
@@ -70,20 +70,20 @@ public class ShrioRedisCache<K, V> implements Cache<K, V> {
 		}
 
 		byte[] bkey = getByteKey(key);
-		ValueOperations<byte[], V> vo = redisTemplate.opsForValue();
+		ValueOperations<byte[], V> vo = shiroRedisTemplate.opsForValue();
 		V value = vo.get(bkey);
-		redisTemplate.delete(bkey);
+		shiroRedisTemplate.delete(bkey);
 		return value;
 	}
 
 	@Override
 	public void clear() throws CacheException {
-		redisTemplate.getConnectionFactory().getConnection().flushDb();
+		shiroRedisTemplate.getConnectionFactory().getConnection().flushDb();
 	}
 
 	@Override
 	public int size() {
-		Long len = redisTemplate.getConnectionFactory().getConnection().dbSize();
+		Long len = shiroRedisTemplate.getConnectionFactory().getConnection().dbSize();
 		return len.intValue();
 	}
 
@@ -91,7 +91,7 @@ public class ShrioRedisCache<K, V> implements Cache<K, V> {
 	@Override
 	public Set<K> keys() {
 		byte[] bkey = (prefix + "*").getBytes();
-		Set<byte[]> set = redisTemplate.keys(bkey);
+		Set<byte[]> set = shiroRedisTemplate.keys(bkey);
 		Set<K> result = Sets.newHashSet();
 
 		if (CollectionUtils.isEmpty(set)) {
@@ -110,7 +110,7 @@ public class ShrioRedisCache<K, V> implements Cache<K, V> {
 		List<V> values = new ArrayList<>(keys.size());
 		for (K k : keys) {
 			byte[] bkey = getByteKey(k);
-			values.add(redisTemplate.opsForValue().get(bkey));
+			values.add(shiroRedisTemplate.opsForValue().get(bkey));
 		}
 		return values;
 	}

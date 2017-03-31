@@ -26,7 +26,7 @@ public class ShiroRedisProperties {
 
 	private int port = 6379;
 
-	private int timeout;
+	private int timeout = 0;
 
 	private int expire = 1800;
 }
