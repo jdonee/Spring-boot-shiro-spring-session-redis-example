@@ -1,4 +1,4 @@
-package org.jdonee.cooking.config;
+package org.jdonee.cooking.config.shiro;
 
 import java.util.Map;
 
@@ -14,6 +14,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,8 +27,11 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.google.common.collect.Maps;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Configuration
 @EnableRedisHttpSession
+@Slf4j
 public class ShiroConfig {
 
 	/**
@@ -189,10 +193,11 @@ public class ShiroConfig {
 	}
 
 	/**
-	 * Redis连接客户端
+	 * Redis连接客户端(Session及Shiro缓存管理)
 	 * 
 	 * @return
 	 */
+	@Primary
 	@Bean(name = "connectionFactory")
 	@DependsOn(value = "shiroProperties")
 	public RedisConnectionFactory connectionFactory() {
@@ -202,6 +207,7 @@ public class ShiroConfig {
 		conn.setPassword(shiroProperties().getPassword());
 		conn.setPort(shiroProperties().getPort());
 		conn.setTimeout(shiroProperties().getTimeout());
+		log.info("1.初始化Redis缓存服务器(登录用户Session及Shiro缓存管理)... ...");
 		return conn;
 	}
 

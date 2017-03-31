@@ -1,4 +1,4 @@
-package org.jdonee.cooking.config;
+package org.jdonee.cooking.config.shiro;
 
 import java.io.IOException;
 import java.util.List;

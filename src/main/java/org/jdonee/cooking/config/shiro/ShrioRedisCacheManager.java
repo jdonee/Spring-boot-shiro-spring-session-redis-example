@@ -1,4 +1,4 @@
-package org.jdonee.cooking.config;
+package org.jdonee.cooking.config.shiro;
 
 import org.apache.shiro.cache.AbstractCacheManager;
 import org.apache.shiro.cache.Cache;

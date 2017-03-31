@@ -1,4 +1,4 @@
-package org.jdonee.cooking.config;
+package org.jdonee.cooking.config.shiro;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
