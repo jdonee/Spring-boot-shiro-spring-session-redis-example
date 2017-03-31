@@ -44,7 +44,7 @@ test {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-aop')
-	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.1.1')
+	compile('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.2.0')
 	compile('org.springframework.boot:spring-boot-starter-data-redis')
 	compile('org.springframework.session:spring-session')
 	compile('org.springframework.boot:spring-boot-configuration-processor')
