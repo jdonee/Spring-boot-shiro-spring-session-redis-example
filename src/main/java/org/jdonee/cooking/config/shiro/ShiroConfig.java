@@ -10,6 +10,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.authc.AnonymousFilter;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.ServletContainerSessionManager;
+import org.jdonee.cooking.config.redis.MyRedisProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.session.data.redis.RedisOperationsSessionRepository;
-import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
 import com.google.common.collect.Maps;
@@ -30,7 +26,6 @@ import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-@EnableRedisHttpSession
 @Slf4j
 public class ShiroConfig {
 
@@ -40,20 +35,8 @@ public class ShiroConfig {
 	 * @return
 	 */
 	@Bean
-	public ShiroRedisProperties shiroProperties() {
-		return new ShiroRedisProperties();
-	}
-
-	/**
-	 * 与Session有关设置链接
-	 * 
-	 * @return
-	 */
-	@Bean
-	public RedisOperationsSessionRepository sessionRepository() {
-		RedisOperationsSessionRepository sessionRepository = new RedisOperationsSessionRepository(connectionFactory());
-		sessionRepository.setDefaultMaxInactiveInterval(shiroProperties().getExpire());// 设置session的有效时长
-		return sessionRepository;
+	public MyRedisProperties shiroProperties() {
+		return new MyRedisProperties();
 	}
 
 	/**
@@ -164,35 +147,6 @@ public class ShiroConfig {
 	}
 
 	/**
-	 * RedisTemplate
-	 * 
-	 * @return
-	 */
-	@Bean(name = "redisTemplate")
-	public RedisTemplate<String, Object> sessionRedisTemplate() {
-		RedisTemplate<String, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(connectionFactory());
-		RedisSerializer stringSerializer = new StringRedisSerializer();
-		template.setKeySerializer(stringSerializer);
-		template.setValueSerializer(sessionRedisSerializer());
-		template.setHashKeySerializer(stringSerializer);
-		template.setHashValueSerializer(sessionRedisSerializer());
-		template.afterPropertiesSet();
-		return template;
-	}
-
-	/**
-	 * 设置redisTemplate的存储格式（在此与Session没有什么关系）
-	 * 
-	 * @return
-	 */
-	@Bean
-	@SuppressWarnings("rawtypes")
-	public RedisSerializer sessionRedisSerializer() {
-		return new Jackson2JsonRedisSerializer<Object>(Object.class);
-	}
-
-	/**
 	 * Redis连接客户端(Session及Shiro缓存管理)
 	 * 
 	 * @return
@@ -203,7 +157,7 @@ public class ShiroConfig {
 	public RedisConnectionFactory connectionFactory() {
 		JedisConnectionFactory conn = new JedisConnectionFactory();
 		conn.setDatabase(shiroProperties().getDatabase());
-		conn.setHostName(shiroProperties().getHostName());
+		conn.setHostName(shiroProperties().getHost());
 		conn.setPassword(shiroProperties().getPassword());
 		conn.setPort(shiroProperties().getPort());
 		conn.setTimeout(shiroProperties().getTimeout());

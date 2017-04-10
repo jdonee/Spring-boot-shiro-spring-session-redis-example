@@ -15,6 +15,11 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -26,13 +31,14 @@ import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * Redis服务器对象缓存配置(对象缓存)
+ * Redis服务器对象缓存配置(对象缓存和Session缓存)
  * 
  * @author Frank.Zeng
  *
  */
 @Configuration
 @EnableCaching
+@EnableRedisHttpSession
 @Slf4j
 public class SecondaryRedisConfig extends CachingConfigurerSupport {
 
@@ -42,8 +48,8 @@ public class SecondaryRedisConfig extends CachingConfigurerSupport {
 	 * @return
 	 */
 	@Bean
-	public SecondRedisProperties redisProperties() {
-		return new SecondRedisProperties();
+	public MyRedisProperties redisProperties() {
+		return new MyRedisProperties();
 	}
 
 	/**
@@ -78,7 +84,7 @@ public class SecondaryRedisConfig extends CachingConfigurerSupport {
 
 	private JedisPoolConfig jedisPoolConfig() {
 		JedisPoolConfig config = new JedisPoolConfig();
-		SecondRedisProperties.Pool props = redisProperties().getPool();
+		MyRedisProperties.Pool props = redisProperties().getPool();
 		config.setMaxTotal(props.getMaxActive());
 		config.setMaxIdle(props.getMaxIdle());
 		config.setMinIdle(props.getMinIdle());
@@ -89,7 +95,7 @@ public class SecondaryRedisConfig extends CachingConfigurerSupport {
 	@Bean(name = "secondaryRedisConnectionFactory")
 	public RedisConnectionFactory secondaryRedisConnectionFactory() {
 		JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory(jedisPoolConfig());
-		redisConnectionFactory.setDatabase(redisProperties().getDatabase());
+		redisConnectionFactory.setDatabase(redisProperties().getSecondaryDatabase());
 		redisConnectionFactory.setPassword(redisProperties().getPassword());
 		redisConnectionFactory.setHostName(redisProperties().getHost());
 		redisConnectionFactory.setTimeout(redisProperties().getTimeout());
@@ -113,5 +119,47 @@ public class SecondaryRedisConfig extends CachingConfigurerSupport {
 		template.setValueSerializer(jackson2JsonRedisSerializer);
 		// template.afterPropertiesSet();
 		return template;
+	}
+
+	/**
+	 * 与Session有关设置链接
+	 * 
+	 * @return
+	 */
+	@Bean
+	public RedisOperationsSessionRepository sessionRepository() {
+		RedisOperationsSessionRepository sessionRepository = new RedisOperationsSessionRepository(
+				secondaryRedisConnectionFactory());
+		sessionRepository.setDefaultMaxInactiveInterval(redisProperties().getSessionExpire());// 设置session的有效时长
+		return sessionRepository;
+	}
+
+	/**
+	 * RedisTemplate
+	 * 
+	 * @return
+	 */
+	@Bean(name = "redisTemplate")
+	public RedisTemplate<String, Object> sessionRedisTemplate() {
+		RedisTemplate<String, Object> template = new RedisTemplate<>();
+		template.setConnectionFactory(secondaryRedisConnectionFactory());
+		RedisSerializer stringSerializer = new StringRedisSerializer();
+		template.setKeySerializer(stringSerializer);
+		template.setValueSerializer(sessionRedisSerializer());
+		template.setHashKeySerializer(stringSerializer);
+		template.setHashValueSerializer(sessionRedisSerializer());
+		template.afterPropertiesSet();
+		return template;
+	}
+
+	/**
+	 * 设置redisTemplate的存储格式（在此与Session没有什么关系）
+	 * 
+	 * @return
+	 */
+	@Bean
+	@SuppressWarnings("rawtypes")
+	public RedisSerializer sessionRedisSerializer() {
+		return new Jackson2JsonRedisSerializer<Object>(Object.class);
 	}
 }
