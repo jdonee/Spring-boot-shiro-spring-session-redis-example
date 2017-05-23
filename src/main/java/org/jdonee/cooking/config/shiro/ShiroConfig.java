@@ -121,7 +121,7 @@ public class ShiroConfig {
 		UserRealm userRealm = new UserRealm();
 		userRealm.setCacheManager(redisCacheManager());
 		userRealm.setCachingEnabled(true);
-		userRealm.setAuthenticationCachingEnabled(true);
+		userRealm.setAuthenticationCachingEnabled(false);//禁用认证缓存
 		userRealm.setAuthorizationCachingEnabled(true);
 		return userRealm;
 	}

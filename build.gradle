@@ -1,12 +1,12 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.2.RELEASE'
+		springBootVersion = '1.5.3.RELEASE'
 	}
 	repositories {
 		mavenLocal()
     	mavenCentral()
     	maven {
-		    url "http://139.196.104.244:9090/nexus/content/groups/public/"
+		    url "http://www.riversdm.com:9090/nexus/content/groups/public/"
 		}
 	}
 	dependencies {
@@ -33,7 +33,7 @@ targetCompatibility = 1.8
 repositories {
 	mavenCentral()
     maven {
-		    url "http://139.196.104.244:9090/nexus/content/groups/public/"
+		    url "http://www.riversdm.com:9090/nexus/content/groups/public/"
 	}
 }
 
@@ -49,7 +49,7 @@ dependencies {
 	compile('org.springframework.session:spring-session')
 	compile('org.springframework.boot:spring-boot-configuration-processor')
 	
-	compile('org.projectlombok:lombok:1.16.14')
+	compile('org.projectlombok:lombok:1.16.16')
 	compile('com.google.guava:guava:21.0')
 	compile('org.apache.commons:commons-lang3:3.4')
 	
